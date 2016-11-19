@@ -1,0 +1,22 @@
+{
+  "name": "google-music-player",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "airtunes": "git+https://github.com/microadam/node_airtunes.git",
+    "async": "^2.1.2",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "express-request-sign": "^1.0.1",
+    "lame": "^1.2.4",
+    "playmusic": "git+https://github.com/microadam/playmusic.git",
+    "request": "^2.78.0",
+    "through2": "^2.0.1"
+  }
+}
