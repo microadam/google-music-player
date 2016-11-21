@@ -97,12 +97,15 @@ class Server extends EventEmitter {
     } else if (Object.keys(body).length === 1 && body.artist) {
       // play artist
       trackFinder.getTracksByArtist(body.artist, cb)
-    } else if (Object.keys(body).length === 2 && body.album && body.artist) {
+    } else if (body.album) {
       // play album by artist
       trackFinder.getTracksInAlbumByArtist(body.album, body.artist, cb)
     } else if (Object.keys(body).length === 1 && body.playlist) {
       // play playlist
       trackFinder.getTracksInPlaylist(body.playlist, cb)
+    } else if (Object.keys(body).length === 1 && body.station) {
+      // play radio station
+      trackFinder.getTracksOnStation(body.station, cb)
     } else {
       cb()
     }

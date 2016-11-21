@@ -5,7 +5,8 @@ class TrackFinder {
   }
 
   getTracksInAlbumByArtist(album, artist, cb) {
-    this.searchByType(artist + ' ' + album, 'album', (error, result) => {
+    const term = artist ? artist + ' ' + album : album
+    this.searchByType(term, 'album', (error, result) => {
       if (error) return cb(error)
       if (!result) return cb()
       this.pm.getAlbum(result.albumId, true, (error, data) => {
@@ -65,6 +66,27 @@ class TrackFinder {
         let tracks = data.entries[0].playlistEntry
         tracks = tracks.map((t) => { return t.track })
         cb(null, { meta: { playlist: playlistItem.name }, tracks: tracks })
+      })
+    })
+  }
+
+  getTracksOnStation(station, cb) {
+    this.pm.search(station, 100, (error, data) => {
+      if (error) return cb(error)
+      if (!data.entries || !data.entries.length) return cb()
+      data.entries = data.entries.filter((item) => {
+        if (item.type === '6' && item.station.seed.seedType === '9') return true
+      })
+      if (!data.entries.length) return cb()
+      const randomlyChosenStation = data.entries[ Math.floor(Math.random() * data.entries.length) ].station
+      const name = randomlyChosenStation.name
+      const id = randomlyChosenStation.seed.curatedStationId
+      this.pm.createStation(name, id, 'station', (error, response) => {
+        if (error) return cb(error)
+        this.pm.getStationTracks(response.mutate_response[0].id, 100, (error, response) => {
+          if (error) return cb(error)
+          cb(null, { meta: { station: randomlyChosenStation.name }, tracks: response.data.stations[0].tracks })
+        })
       })
     })
   }
